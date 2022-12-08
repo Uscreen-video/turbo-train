@@ -1,0 +1,28 @@
+{
+  "name": "@uscreentv/turbo-train",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./index.js"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Uscreen-video/turbo-train.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Uscreen-video/turbo-train/issues"
+  },
+  "homepage": "https://github.com/Uscreen-video/turbo-train#readme",
+  "peerDependencies": {
+    "@hotwired/turbo": "^7.2.4"
+  }
+}
