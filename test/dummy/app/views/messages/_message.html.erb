@@ -1,4 +1,4 @@
-<div id="<%= message.id %>">
+<div id="<%= ENV["TEST_MSG_ID"] + message.id.to_s %>">
   <div>
     <%= message.user.name %>
   </div>
