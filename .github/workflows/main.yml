@@ -14,6 +14,7 @@ jobs:
 
     env:
       RAILS_VERSION: "${{ matrix.rails-version }}"
+      TEST_MSG_ID: "msg-${{ matrix.rails-version }}-${{ matrix.ruby-version }}"
 
     name: ${{ format('Tests (Ruby {0}, Rails {1})', matrix.ruby-version, matrix.rails-version) }}
     runs-on: ubuntu-latest
@@ -27,6 +28,10 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
+
+      - name: Prepare test database
+        run: |
+          bin/rails db:create db:migrate
 
       - name: Run tests
         run: |
