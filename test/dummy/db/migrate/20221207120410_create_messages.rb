@@ -1,4 +1,4 @@
-class CreateMessages < ActiveRecord::Migration[Rails.version]
+class CreateMessages < ActiveRecord::Migration["#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}"]
   def change
     create_table :messages do |t|
       t.string :text
