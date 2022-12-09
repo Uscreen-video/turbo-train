@@ -1,5 +1,5 @@
 name: CI
-on: [push, pull_request]
+on: [push]
 jobs:
   tests:
     strategy:
@@ -15,6 +15,9 @@ jobs:
     env:
       RAILS_VERSION: "${{ matrix.rails-version }}"
       TEST_MSG_ID: "msg-${{ matrix.rails-version }}-${{ matrix.ruby-version }}"
+      MERCURE_DOMAIN: ${{ secrets.MERCURE_DOMAIN }}
+      MERCURE_PUBLISHER_KEY: ${{ secrets.MERCURE_PUBLISHER_KEY }}
+      MERCURE_SUBSCRIBER_KEY: ${{ secrets.MERCURE_SUBSCRIBER_KEY }}
 
     name: ${{ format('Tests (Ruby {0}, Rails {1})', matrix.ruby-version, matrix.rails-version) }}
     runs-on: ubuntu-latest
