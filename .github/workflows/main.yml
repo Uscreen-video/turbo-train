@@ -1,27 +1,47 @@
-name: Ruby
-
-on:
-  push:
-    branches:
-      - main
-
-  pull_request:
-
+name: CI
+on: [push]
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+  tests:
     strategy:
       matrix:
-        ruby:
-          - 2.7.6
+        ruby-version:
+          - "2.7"
+          - "3.0"
+        rails-version:
+          - "6.1"
+          - "7.0"
+          - "main"
+
+    env:
+      RAILS_VERSION: "${{ matrix.rails-version }}"
+      TEST_MSG_ID: "msg-${{ matrix.rails-version }}-${{ matrix.ruby-version }}"
+      MERCURE_DOMAIN: ${{ secrets.MERCURE_DOMAIN }}
+      MERCURE_PUBLISHER_KEY: ${{ secrets.MERCURE_PUBLISHER_KEY }}
+      MERCURE_SUBSCRIBER_KEY: ${{ secrets.MERCURE_SUBSCRIBER_KEY }}
+
+    name: ${{ format('Tests (Ruby {0}, Rails {1})', matrix.ruby-version, matrix.rails-version) }}
+    runs-on: ubuntu-latest
+    continue-on-error: true
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-    - name: Run the default task
-      run: bundle exec rake
+      - uses: actions/checkout@v1
+
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+      - name: Print context
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: Bundle
+        run: bundle install
+
+      - name: Prepare test database
+        run: |
+          bin/rails db:create db:migrate
+
+      - name: Run tests
+        run: |
+          bin/test test/**/*_test.rb
+

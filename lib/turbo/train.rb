@@ -1,10 +1,4 @@
-# frozen_string_literal: true
-
-require_relative "train/version"
-
-module Turbo
-  module Train
-    class Error < StandardError; end
-    # Your code goes here...
-  end
-end
+require "turbo/train/version"
+require "turbo/train/config"
+require "turbo/train/engine"
+require "turbo/train/helper"

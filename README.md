@@ -1,45 +1,93 @@
+![Build Status](https://github.com/Uscreen-video/turbo-train/actions/workflows/main.yml/badge.svg?branch=main)
+
 # Turbo::Train
 
-Broadcasting Rails Turbo actions to SSE receivers.
+<img align="right" width="160" title="Turbo::Train logo"
+     src="./logo.svg">
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/turbo/train`. To experiment with that code, run `bin/console` for an interactive prompt.
+Real-time page updates for your Rails app with [Mercure](https://mercure.rocks) and [Hotwire Turbo](https://github.com/hotwired/turbo-rails).
 
-TODO: Delete this and the text above, and describe your gem
+* **Uses [SSE](https://html.spec.whatwg.org/multipage/server-sent-events.html)**. No more websockets, client libraries, JS code and handling reconnects. Just an HTTP connection. Let the [browser](https://caniuse.com/eventsource) do the work.
+* **Seamless Hotwire integration.** Use it exactly like [ActionCable](https://github.com/hotwired/turbo-rails#come-alive-with-turbo-streams). Drop-in replacement for `broadcast_action_to` and usual helpers.
+* **Simple.** Get running in minutes, scale easily in production 🚀 
+
+Uses [Mercure server](https://mercure.rocks/docs/ecosystem/hotwire) for delivering [Turbo Streams](https://turbo.hotwired.dev/handbook/streams) over SSE.
+
+## Before your proceed
+
+Using this gem requires some knowledge of ActionCable and broadcasting turbo stream. Turbo::Train is designed to mimic those, so it is highly recommended to first try the original to understand the concept.
+
+## Prerequisites
+
+1. Rails 7+
+2. Mercure server (setup instructions below)
+
+This should also work for Rails 6, but you will also need to install [turbo-rails](https://github.com/hotwired/turbo-rails#installation) manually before this gem.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+### Step 1. Mercure
 
-```ruby
-gem 'turbo-train'
+Mercure is installed as a plugin to Caddy server. For mac users everything is pretty easy:
+
+```
+brew install caddy
 ```
 
-And then execute:
+```
+caddy add-package github.com/dunglas/mercure/caddy
+```
 
-    $ bundle install
+Now you are ready to run 🚀
 
-Or install it yourself as:
+```
+caddy run
+```
 
-    $ gem install turbo-train
+### Step 2. Turbo::Train
+
+Instructions for Rails 7+
+
+1. Add the turbo-train gem to your Gemfile: `gem 'turbo-train'`
+2. Run `bundle install`
+3. Run `rails turbo_train:install`
 
 ## Usage
 
-TODO: Write usage instructions here
+If you are familiar with broadcasting from ActionCable, usage would be extremely familiar:
 
-## Development
+```
+<%# app/views/chat_messages/index.html.erb %>
+<%= turbo_train_from "chat_messages" %>
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+And then you can send portions of HTML from your Rails backend to deliver live to all currently open browsers:
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```
+# app/models/chat_message.rb
+after_create_commit { Turbo::Train.broadcast_action_to('chat_messages', action: :append, partial: "chat_message") }
+```
 
-## Contributing
+You have the same options as original Rails Turbo helpers: rendering partials, pure html, [same actions](https://turbo.hotwired.dev/reference/streams).
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/turbo-train. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/turbo-train/blob/main/CODE_OF_CONDUCT.md).
+## Configuration
+
+To specify different Mercure server settings, please adjust the generated `config/initializers/turbo_train.rb` file:
+
+```
+Turbo::Train.configure do |config|
+  config.mercure_domain = ...
+  config.publisher_key = ...
+  config.subscriber_key = ...
+end
+```
+
+* Your SSE will connect to `https://#{configuration.mercure_domain}/.well-known`. 
+* The publisher/subscriber key correspond to the [configuration](https://mercure.rocks/docs/hub/config) or your Mercure server.
+
+By default, these are set to `localhost`/`test`/`testing` to match the configuration of the local development server from the installation instructions above.
+
+***
 
 ## License
-
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the Turbo::Train project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/turbo-train/blob/main/CODE_OF_CONDUCT.md).
