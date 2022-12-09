@@ -1,4 +1,4 @@
-![Build Status](https://github.com/Uscreen-video/turbo-train/actions/workflows/main.yml/badge.svg?branch=main)
+![Build Status](https://github.com/Uscreen-video/turbo-train/actions/workflows/main.yml/badge.svg)
 
 # Turbo::Train
 
