@@ -1,0 +1,8 @@
+<%= turbo_train_from "messages" %>
+
+<h1>Chat messages</h1>
+<div id="messages">
+  <% @messages.each do |msg| %>
+    <%= render msg %>
+  <% end %>
+</div>
