@@ -13,7 +13,9 @@ Real-time page updates for your Rails app over SSE with [Mercure](https://mercur
 
 ## Before your proceed
 
-Using this gem requires some knowledge of ActionCable and broadcasting turbo stream. Turbo::Train is designed to mimic those, so it is highly recommended to first try the original to understand the concept.
+Using this gem requires some knowledge of ActionCable and broadcasting turbo streams. Turbo::Train is designed to mimic those, so it is highly recommended to first try the original to understand the concept.
+
+You can start [here](https://hotwired.dev/) and proceed with the [Turbo Handbook](https://turbo.hotwired.dev/handbook/introduction). One of its chapters will be covering [Turbo Streams](https://turbo.hotwired.dev/handbook/streams). Specifically [this section](https://turbo.hotwired.dev/handbook/streams#integration-with-server-side-frameworks) would be the main prerequisite to understanding what this gem is about: it covers [Broadcastable](https://github.com/hotwired/turbo-rails/blob/main/app/models/concerns/turbo/broadcastable.rb) and the overall idea of working with Mercure.
 
 ## Prerequisites
 
