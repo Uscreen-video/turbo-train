@@ -5,13 +5,11 @@
 <img align="right" width="160" title="Turbo::Train logo"
      src="./logo.svg">
 
-Real-time page updates for your Rails app with [Mercure](https://mercure.rocks) and [Hotwire Turbo](https://github.com/hotwired/turbo-rails).
+Real-time page updates for your Rails app over SSE with [Mercure](https://mercure.rocks) and [Hotwire Turbo](https://turbo.hotwired.dev/handbook/streams#integration-with-server-side-frameworks).
 
 * **Uses [SSE](https://html.spec.whatwg.org/multipage/server-sent-events.html)**. No more websockets, client libraries, JS code and handling reconnects. Just an HTTP connection. Let the [browser](https://caniuse.com/eventsource) do the work.
 * **Seamless Hotwire integration.** Use it exactly like [ActionCable](https://github.com/hotwired/turbo-rails#come-alive-with-turbo-streams). Drop-in replacement for `broadcast_action_to` and usual helpers.
 * **Simple.** Get running in minutes, scale easily in production 🚀 
-
-Uses [Mercure server](https://mercure.rocks/docs/ecosystem/hotwire) for delivering [Turbo Streams](https://turbo.hotwired.dev/handbook/streams) over SSE.
 
 ## Before your proceed
 
