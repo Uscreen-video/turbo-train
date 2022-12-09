@@ -52,6 +52,11 @@ Instructions for Rails 7+
 2. Run `bundle install`
 3. Run `rails turbo_train:install`
 
+Instructions for Rails 6
+
+1. Install [turbo-rails](https://github.com/hotwired/turbo-rails#installation)
+2. Repeat steps for Rails 7 above
+
 ## Usage
 
 If you are familiar with broadcasting from ActionCable, usage would be extremely familiar:
