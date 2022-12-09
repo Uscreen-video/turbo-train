@@ -1,0 +1,34 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  tests:
+    strategy:
+      matrix:
+        ruby-version:
+          - "2.7"
+          - "3.0"
+        rails-version:
+          - "6.1"
+          - "7.0"
+          - "main"
+
+    env:
+      RAILS_VERSION: "${{ matrix.rails-version }}"
+
+    name: ${{ format('Tests (Ruby {0}, Rails {1})', matrix.ruby-version, matrix.rails-version) }}
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+
+      - name: Run tests
+        run: |
+          bin/test test/**/*_test.rb
+
