@@ -72,8 +72,14 @@ If you are familiar with broadcasting from ActionCable, usage would be extremely
 And then you can send portions of HTML from your Rails backend to deliver live to all currently open browsers:
 
 ```
+Turbo::Train.broadcast_action_to('chat_messages', action: :append, target:'append_new_messages_here', html: '<span>Test!</span>')
+```
+
+or in real world you'd probably have something like
+
+```
 # app/models/chat_message.rb
-after_create_commit { Turbo::Train.broadcast_action_to('append_new_messages_here', action: :append, html: "<span>Hello world</span>") }
+after_create_commit { Turbo::Train.broadcast_action_to('chat_messages', action: :append, target:'append_new_messages_here', partial: 'somepath/message') }
 ```
 
 You have the same options as original Rails Turbo helpers: rendering partials, pure html, [same actions](https://turbo.hotwired.dev/reference/streams).
