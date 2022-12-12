@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/Uscreen-video/turbo-train#readme",
   "peerDependencies": {
-    "@hotwired/turbo": "^7.2.4"
+    "@hotwired/turbo-rails": "^7.2.4"
   }
 }

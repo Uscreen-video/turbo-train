@@ -1,4 +1,4 @@
-import { connectStreamSource, disconnectStreamSource } from "@hotwired/turbo";
+import { Turbo } from "@hotwired/turbo-rails"
 
 export default class TurboTrain extends HTMLElement {
   static get observedAttributes() {
@@ -11,11 +11,11 @@ export default class TurboTrain extends HTMLElement {
 
   connectedCallback() {
     this.eventSource = new EventSource(`${this.href}/mercure?topic=${this.name}&authorization=${this.session}`);
-    connectStreamSource(this.eventSource);
+    Turbo.connectStreamSource(this.eventSource);
   }
 
   disconnectedCallback() {
-    disconnectStreamSource(this.eventSource);
+    Turbo.disconnectStreamSource(this.eventSource);
   }
 
   get href() {
