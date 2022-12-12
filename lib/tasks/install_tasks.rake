@@ -6,6 +6,7 @@ namespace :turbo_train do
   desc "Install Turbo::Train into the app"
   task :install do
     run_install_template 'create_initializer'
+    run_install_template 'create_caddyfile'
 
     if Rails.root.join("config/importmap.rb").exist?
       Rake::Task["turbo_train:install:importmap"].invoke

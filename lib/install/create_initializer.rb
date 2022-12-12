@@ -5,6 +5,7 @@ Turbo::Train.configure do |config|
   config.mercure_domain = 'localhost'
   config.publisher_key = 'test'
   config.subscriber_key = 'testing'
+  config.skip_ssl_verification = true # Development only; don't do this in production
 end
   }
 end

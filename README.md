@@ -26,9 +26,22 @@ This should also work for Rails 6, but you will also need to install [turbo-rail
 
 ## Installation
 
-### Step 1. Mercure
+### Step 1. Turbo::Train
 
-Mercure is installed as a plugin to Caddy server. For mac users everything is pretty easy:
+Instructions for Rails 7+
+
+1. Add the turbo-train gem to your Gemfile: `gem 'turbo-train'`
+2. Run `bundle install`
+3. Run `rails turbo_train:install`
+
+Instructions for Rails 6
+
+1. Install [turbo-rails](https://github.com/hotwired/turbo-rails#installation)
+2. Repeat steps for Rails 7 above
+
+### Step 2. Mercure
+
+Mercure is installed as a plugin to [Caddy](https://github.com/caddyserver/caddy) server. For mac users everything is pretty easy:
 
 ```
 brew install caddy
@@ -44,18 +57,6 @@ Now you are ready to run 🚀
 caddy run
 ```
 
-### Step 2. Turbo::Train
-
-Instructions for Rails 7+
-
-1. Add the turbo-train gem to your Gemfile: `gem 'turbo-train'`
-2. Run `bundle install`
-3. Run `rails turbo_train:install`
-
-Instructions for Rails 6
-
-1. Install [turbo-rails](https://github.com/hotwired/turbo-rails#installation)
-2. Repeat steps for Rails 7 above
 
 ## Usage
 
@@ -64,13 +65,15 @@ If you are familiar with broadcasting from ActionCable, usage would be extremely
 ```
 <%# app/views/chat_messages/index.html.erb %>
 <%= turbo_train_from "chat_messages" %>
+
+<div id="append_new_messages_here"></div>
 ```
 
 And then you can send portions of HTML from your Rails backend to deliver live to all currently open browsers:
 
 ```
 # app/models/chat_message.rb
-after_create_commit { Turbo::Train.broadcast_action_to('chat_messages', action: :append, partial: "chat_message") }
+after_create_commit { Turbo::Train.broadcast_action_to('append_new_messages_here', action: :append, html: "<span>Hello world</span>") }
 ```
 
 You have the same options as original Rails Turbo helpers: rendering partials, pure html, [same actions](https://turbo.hotwired.dev/reference/streams).
