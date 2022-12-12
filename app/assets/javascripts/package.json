@@ -1,12 +1,12 @@
 {
-  "name": "@goodsign/turbo-train",
+  "name": "@Uscreen-video/turbo-train",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "turbo-train.js",
   "type": "module",
   "exports": {
     ".": {
-      "import": "./index.js"
+      "import": "./turbo-train.js"
     }
   },
   "scripts": {
