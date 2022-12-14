@@ -13,8 +13,13 @@ module Turbo
         end
       end
 
+      initializer "turbotrain.helpers", before: :load_config_initializers do
+        ActiveSupport.on_load(:action_controller_base) do
+          helper Turbo::Train::StreamsHelper
+        end
+      end
+
       initializer "turbotrain.load" do
-        # TODO: Find a better hook
         ActiveSupport.on_load(:active_record) do
           require_relative 'train'
         end

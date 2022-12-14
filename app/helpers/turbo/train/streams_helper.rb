@@ -1,4 +1,4 @@
-module ApplicationHelper
+module Turbo::Train::StreamsHelper
   def turbo_train_from(*streamables, **attributes)
     attributes[:name] = Turbo::Train.signed_stream_name(streamables)
     attributes[:session] = Turbo::Train.encode({ platform: "web" })
