@@ -1,3 +1,4 @@
+require 'rails/engine'
 require 'turbo-rails'
 
 module Turbo
