@@ -4,6 +4,16 @@ module Turbo
   module Train
     class Engine < ::Rails::Engine
       isolate_namespace Turbo::Train
+      config.eager_load_namespaces << Turbo::Train
+      config.autoload_once_paths = %W(
+        #{root}/app/channels
+        #{root}/app/controllers
+        #{root}/app/controllers/concerns
+        #{root}/app/helpers
+        #{root}/app/models
+        #{root}/app/models/concerns
+        #{root}/app/jobs
+      )
 
       PRECOMPILE_ASSETS = %w( turbo-train.js turbo-train.min.js )
 
