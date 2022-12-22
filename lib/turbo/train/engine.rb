@@ -1,11 +1,9 @@
-require 'rails/engine'
 require 'turbo-rails'
 
 module Turbo
   module Train
     class Engine < ::Rails::Engine
       isolate_namespace Turbo::Train
-      config.eager_load_namespaces << Turbo::Train
       config.autoload_once_paths = %W(
         #{root}/app/channels
         #{root}/app/controllers
