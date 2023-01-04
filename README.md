@@ -2,8 +2,9 @@
 
 # Turbo::Train
 
-<img align="right" width="160" title="Turbo::Train logo"
-     src="./logo.svg">
+<img align="right" width="220" title="Turbo::Train logo"
+     src="https://user-images.githubusercontent.com/3010927/210603861-4b265489-a4a7-4d2a-bceb-40ceccebcd96.jpg">
+     
 
 Real-time page updates for your Rails app over SSE with [Mercure](https://mercure.rocks) and [Hotwire Turbo](https://turbo.hotwired.dev/handbook/streams#integration-with-server-side-frameworks).
 
@@ -102,6 +103,9 @@ end
 By default, these are set to `localhost`/`test`/`testing` to match the configuration of the local development server from the installation instructions above.
 
 ***
+
+<img width="80" title="Turbo::Train logo"
+     src="https://user-images.githubusercontent.com/3010927/210604381-4b715322-55f8-4db8-8bb8-660be734704d.jpg">
 
 ## License
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
