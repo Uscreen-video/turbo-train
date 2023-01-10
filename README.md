@@ -58,12 +58,11 @@ Now you are ready to run 🚀
 caddy run
 ```
 
-
 ## Usage
 
 If you are familiar with broadcasting from ActionCable, usage would be extremely familiar:
 
-```
+```erb
 <%# app/views/chat_messages/index.html.erb %>
 <%= turbo_train_from "chat_messages" %>
 
@@ -72,15 +71,27 @@ If you are familiar with broadcasting from ActionCable, usage would be extremely
 
 And then you can send portions of HTML from your Rails backend to deliver live to all currently open browsers:
 
-```
-Turbo::Train.broadcast_action_to('chat_messages', action: :append, target:'append_new_messages_here', html: '<span>Test!</span>')
+```ruby
+Turbo::Train.broadcast_action_to(
+  'chat_messages',
+  action: :append,
+  target:'append_new_messages_here',
+  html: '<span>Test!</span>'
+)
 ```
 
 or in real world you'd probably have something like
 
-```
+```ruby
 # app/models/chat_message.rb
-after_create_commit { Turbo::Train.broadcast_action_to('chat_messages', action: :append, target:'append_new_messages_here', partial: 'somepath/message') }
+after_create_commit do
+  Turbo::Train.broadcast_action_to(
+    'chat_messages',
+    action: :append,
+    target: 'append_new_messages_here',
+    partial: 'somepath/message'
+  )
+end
 ```
 
 You have the same options as original Rails Turbo helpers: rendering partials, pure html, [same actions](https://turbo.hotwired.dev/reference/streams).
@@ -89,7 +100,7 @@ You have the same options as original Rails Turbo helpers: rendering partials, p
 
 To specify different Mercure server settings, please adjust the generated `config/initializers/turbo_train.rb` file:
 
-```
+```ruby
 Turbo::Train.configure do |config|
   config.mercure_domain = ...
   config.publisher_key = ...
