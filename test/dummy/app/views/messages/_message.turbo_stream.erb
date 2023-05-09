@@ -1,11 +1,1 @@
-<%= turbo_stream.replace ENV["TEST_MSG_ID"] do %>
-  <div id="<%= ENV["TEST_MSG_ID"] + message.id.to_s %>">
-    <div>
-      <%= message.user.name %>
-    </div>
-    <div>
-      <%= message.text %>
-    </div>
-    <br/>
-  </div>
-<% end %>
+<%= turbo_stream.replace "message_1" do %>Goodbye!<% end %>

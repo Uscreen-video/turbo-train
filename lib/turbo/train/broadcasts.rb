@@ -84,4 +84,8 @@ module Turbo::Train::Broadcasts
   def broadcast_prepend_later_to(*streamables, **opts)
     broadcast_action_later_to(*streamables, action: :prepend, **opts)
   end
+
+  def broadcast_render_later_to(*streamables, **rendering)
+    Turbo::Train::BroadcastJob.perform_later streamables, **rendering
+  end
 end

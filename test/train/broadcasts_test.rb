@@ -5,47 +5,156 @@ class BroadcastsTest < ActiveSupport::TestCase
 
   test "broadcasting render" do
     user_john = User.create! name: "John"
-    user_bob = User.create! name: "Bob"
 
-    message_1 = Message.create! user: user_john, text: "Hey Bob!"
+    message = Message.create! user: user_john, text: "Hey Bob!"
 
-    r = Turbo::Train.broadcast_render_to( message_1, partial: 'messages/message', locals: { message: message_1 } )
-    assert_broadcast_on
-    assert_equal r.code, '200'
-    assert_match /urn:uuid:.*/, r.body
+    assert_broadcast_on "messages", turbo_stream_action_tag("replace", target: "message_1", template: "Goodbye!") do
+      r = Turbo::Train.broadcast_render_to("messages", partial: 'messages/message', locals: { message: message })
+
+      assert_equal r.code, '200'
+      assert_match /urn:uuid:.*/, r.body
+    end
   end
 
-  test "broadcasting action" do
-    train_assert_broadcast_on 'messages', turbo_stream_action_tag("append", target: "target", template: 'content') do
+  test "broadcast_action_to" do
+    assert_broadcast_on 'messages', turbo_stream_action_tag("replace", target: "target", template: 'content') do
+      r = Turbo::Train.broadcast_action_to('messages', action: 'replace', target: 'target', content: 'content')
+      assert_equal r.code, '200'
+      assert_match /urn:uuid:.*/, r.body
+    end
+  end
+
+  test "broadcast_append_to" do
+    assert_broadcast_on 'messages', turbo_stream_action_tag("append", target: "target", template: 'content') do
       r = Turbo::Train.broadcast_append_to('messages', target: 'target', content: 'content')
       assert_equal r.code, '200'
       assert_match /urn:uuid:.*/, r.body
     end
-    # BROADCAST_TO_METHODS = %w(broadcast_append_to broadcast_remove_to broadcast_replace_to broadcast_update_to broadcast_before_to broadcast_after_to broadcast_prepend_to).freeze
-    #
-    # BROADCAST_TO_METHODS.each do |method|
-    #   assert_respond_to Turbo::Train, method
-    #
-    #   r = Turbo::Train.public_send(method, 'messages', target: 'target', content: 'content')
-    #
-    #   assert_equal r.code, '200'
-    #   assert_match /urn:uuid:.*/, r.body
-    # end
   end
 
-  test "broadcasting action later" do
-    BROADCAST_LATER_TO_METHODS = %w(
-      broadcast_replace_later_to broadcast_remove_later_to broadcast_update_later_to
-      broadcast_before_later_to broadcast_after_later_to
-      broadcast_append_later_to broadcast_prepend_later_to
-    ).freeze
-
-    BROADCAST_LATER_TO_METHODS.each do |method|
-      assert_respond_to Turbo::Train, method
-
-      Turbo::Train.public_send(method, 'messages', target: 'target', content: 'content')
+  test "broadcast_remove_to" do
+    assert_broadcast_on 'messages', turbo_stream_action_tag("remove", target: "target", template: 'content') do
+      r = Turbo::Train.broadcast_remove_to('messages', target: 'target', content: 'content')
+      assert_equal r.code, '200'
+      assert_match /urn:uuid:.*/, r.body
     end
+  end
 
-    assert_enqueued_jobs BROADCAST_LATER_TO_METHODS.size
+  test "broadcast_replace_to" do
+    assert_broadcast_on 'messages', turbo_stream_action_tag("replace", target: "target", template: 'content') do
+      r = Turbo::Train.broadcast_replace_to('messages', target: 'target', content: 'content')
+      assert_equal r.code, '200'
+      assert_match /urn:uuid:.*/, r.body
+    end
+  end
+
+  test "broadcast_update_to" do
+    assert_broadcast_on 'messages', turbo_stream_action_tag("update", target: "target", template: 'content') do
+      r = Turbo::Train.broadcast_update_to('messages', target: 'target', content: 'content')
+      assert_equal r.code, '200'
+      assert_match /urn:uuid:.*/, r.body
+    end
+  end
+
+  test "broadcast_before_to" do
+    assert_broadcast_on 'messages', turbo_stream_action_tag("before", target: "target", template: 'content') do
+      r = Turbo::Train.broadcast_before_to('messages', target: 'target', content: 'content')
+      assert_equal r.code, '200'
+      assert_match /urn:uuid:.*/, r.body
+    end
+  end
+
+  test "broadcast_after_to" do
+    assert_broadcast_on 'messages', turbo_stream_action_tag("after", target: "target", template: 'content') do
+      r = Turbo::Train.broadcast_after_to('messages', target: 'target', content: 'content')
+      assert_equal r.code, '200'
+      assert_match /urn:uuid:.*/, r.body
+    end
+  end
+
+  test "broadcast_prepend_to" do
+    assert_broadcast_on 'messages', turbo_stream_action_tag("prepend", target: "target", template: 'content') do
+      r = Turbo::Train.broadcast_prepend_to('messages', target: 'target', content: 'content')
+      assert_equal r.code, '200'
+      assert_match /urn:uuid:.*/, r.body
+    end
+  end
+
+  # later
+
+  test "broadcast_replace_later_to" do
+    assert_broadcast_on 'messages', turbo_stream_action_tag("replace", target: "target", template: 'content') do
+      perform_enqueued_jobs do
+        Turbo::Train.broadcast_replace_later_to('messages', target: 'target', content: 'content')
+      end
+    end
+  end
+
+  test "broadcast_remove_later_to" do
+    assert_broadcast_on 'messages', turbo_stream_action_tag("remove", target: "target", template: 'content') do
+      perform_enqueued_jobs do
+        Turbo::Train.broadcast_remove_later_to('messages', target: 'target', content: 'content')
+      end
+    end
+  end
+
+  test "broadcast_update_later_to" do
+    assert_broadcast_on 'messages', turbo_stream_action_tag("update", target: "target", template: 'content') do
+      perform_enqueued_jobs do
+        Turbo::Train.broadcast_update_later_to('messages', target: 'target', content: 'content')
+      end
+    end
+  end
+
+  test "broadcast_before_later_to" do
+    assert_broadcast_on 'messages', turbo_stream_action_tag("before", target: "target", template: 'content') do
+      perform_enqueued_jobs do
+        Turbo::Train.broadcast_before_later_to('messages', target: 'target', content: 'content')
+      end
+    end
+  end
+
+  test "broadcast_after_later_to" do
+    assert_broadcast_on 'messages', turbo_stream_action_tag("after", target: "target", template: 'content') do
+      perform_enqueued_jobs do
+        Turbo::Train.broadcast_after_later_to('messages', target: 'target', content: 'content')
+      end
+    end
+  end
+
+  test "broadcast_append_later_to" do
+    assert_broadcast_on 'messages', turbo_stream_action_tag("append", target: "target", template: 'content') do
+      perform_enqueued_jobs do
+        Turbo::Train.broadcast_append_later_to('messages', target: 'target', content: 'content')
+      end
+    end
+  end
+
+  test "broadcast_prepend_later_to" do
+    assert_broadcast_on 'messages', turbo_stream_action_tag("prepend", target: "target", template: 'content') do
+      perform_enqueued_jobs do
+        Turbo::Train.broadcast_prepend_later_to('messages', target: 'target', content: 'content')
+      end
+    end
+  end
+
+  test "broadcast_action_later_to" do
+    assert_broadcast_on 'messages', turbo_stream_action_tag("replace", target: "target", template: 'content') do
+      perform_enqueued_jobs do
+        Turbo::Train.broadcast_action_later_to('messages', action: 'replace', target: 'target', content: 'content')
+      end
+    end
+  end
+
+  test "broadcast_render_later_to" do
+    user_john = User.create! name: "John"
+
+    message = Message.create! user: user_john, text: "Hey Bob!"
+
+    assert_broadcast_on "messages", turbo_stream_action_tag("replace", target: "message_1", template: "Goodbye!") do
+      perform_enqueued_jobs do
+        Turbo::Train.broadcast_render_later_to("messages", partial: 'messages/message', locals: { message: message })
+      end
+    end
   end
 end

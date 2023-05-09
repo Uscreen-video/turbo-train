@@ -12,7 +12,7 @@ module Turbo
         Turbo::Train.instance_variable_set(:@server, Turbo::Train::Server.new(Turbo::Train.configuration))
       end
 
-      def train_assert_broadcast_on(stream, data, &block)
+      def assert_broadcast_on(stream, data, &block)
         signed_stream_name = Turbo::Train.signed_stream_name(stream)
 
         new_messages = Turbo::Train.server.broadcasts(signed_stream_name)

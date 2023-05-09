@@ -1,12 +1,11 @@
 module Turbo
   module Train
-    class TestServer
+    class TestServer < Server
       attr_reader :configuration, :channels_data
 
       def initialize(configuration)
         @configuration = configuration
         @channels_data = {}
-        @real_server = Turbo::Train::Server.new(configuration)
       end
 
       def publish(topics:, data:)
@@ -14,8 +13,8 @@ module Turbo
           @channels_data[topic] ||= []
           @channels_data[topic] << data[:data]
         end
-        puts @channels_data
-        @real_server.publish(topics: topics, data: data)
+
+        super
       end
 
       def broadcasts(channel)
