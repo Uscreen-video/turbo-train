@@ -23,6 +23,11 @@ group :test do
   gem 'puma'
   gem 'capybara'
   gem 'rexml'
+  # Locked because on 4.9.1 getting error:
+  # BroadcastingTest#test_Turbo::Train_broadcasts_Turbo_Streams:
+  # ArgumentError: wrong number of arguments (given 2, expected 0..1)
+  #     selenium-webdriver-4.9.1/lib/selenium/webdriver/common/logger.rb:51:in `initialize'
+  # https://github.com/SeleniumHQ/selenium/issues/12013
   gem 'selenium-webdriver', '4.9.0'
   gem 'webdrivers'
   gem 'sqlite3'
