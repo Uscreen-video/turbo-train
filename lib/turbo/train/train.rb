@@ -22,18 +22,18 @@ module Turbo
         @server ||= Server.new(configuration)
       end
 
-      private
-
-      def render_format(format, **rendering)
-        ApplicationController.render(formats: [ format ], **rendering)
-      end
-
       def stream_name_from(streamables)
         if streamables.is_a?(Array)
           streamables.map  { |streamable| stream_name_from(streamable) }.join(":")
         else
           streamables.then { |streamable| streamable.try(:to_gid_param) || streamable.to_param }
         end
+      end
+
+      private
+
+      def render_format(format, **rendering)
+        ApplicationController.render(formats: [ format ], **rendering)
       end
     end
   end

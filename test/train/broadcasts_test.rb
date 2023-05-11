@@ -33,8 +33,8 @@ class BroadcastsTest < ActiveSupport::TestCase
   end
 
   test "broadcast_remove_to" do
-    assert_broadcast_on 'messages', turbo_stream_action_tag("remove", target: "target", template: 'content') do
-      r = Turbo::Train.broadcast_remove_to('messages', target: 'target', content: 'content')
+    assert_broadcast_on 'messages', turbo_stream_action_tag("remove", target: "target") do
+      r = Turbo::Train.broadcast_remove_to('messages', target: 'target')
       assert_equal r.code, '200'
       assert_match /urn:uuid:.*/, r.body
     end

@@ -29,7 +29,12 @@ module Turbo
         end
 
         message = new_messages.find { |msg| msg == data }
-        assert message, "No messages sent with #{data} to #{stream}"
+        if message.nil?
+          puts "signed_stream_name => #{signed_stream_name}"
+          puts "channels_data: #{Turbo::Train.server.channels_data.inspect}}"
+        end
+
+        assert message, "No messages sent with #{data} to #{Turbo::Train.stream_name_from(stream)}"
       end
     end
   end
