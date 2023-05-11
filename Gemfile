@@ -23,7 +23,7 @@ group :test do
   gem 'puma'
   gem 'capybara'
   gem 'rexml'
-  gem 'selenium-webdriver'
+  gem 'selenium-webdriver', '4.9.0'
   gem 'webdrivers'
   gem 'sqlite3'
 end
