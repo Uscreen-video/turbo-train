@@ -1,7 +1,11 @@
 require "test_helper"
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
-  driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400]
+  if ENV['CI']
+    driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400]
+  else
+    driven_by :selenium, screen_size: [1400, 1400]
+  end
 
   def assert_no_javascript_errors
     before = page.driver.browser.logs.get(:browser)

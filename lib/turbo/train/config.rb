@@ -9,6 +9,10 @@ module Turbo
         @subscriber_key = 'testing'
         @skip_ssl_verification = Rails.env.development? || Rails.env.test?
       end
+
+      def url
+        "https://#{mercure_domain}/.well-known"
+      end
     end
 
     class << self
