@@ -30,6 +30,10 @@ module Turbo
         end
       end
 
+      def url
+        configuration.url
+      end
+
       private
 
       def render_format(format, **rendering)
