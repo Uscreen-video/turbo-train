@@ -1,6 +1,6 @@
 {
   "name": "@uscreentv/turbo-train",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "turbo-train.js",
   "type": "module",
