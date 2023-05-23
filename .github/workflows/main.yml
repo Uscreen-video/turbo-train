@@ -19,6 +19,9 @@ jobs:
       MERCURE_DOMAIN: ${{ secrets.MERCURE_DOMAIN }}
       MERCURE_PUBLISHER_KEY: ${{ secrets.MERCURE_PUBLISHER_KEY }}
       MERCURE_SUBSCRIBER_KEY: ${{ secrets.MERCURE_SUBSCRIBER_KEY }}
+      FANOUT_FASTLY_KEY: ${{ secrets.FANOUT_FASTLY_KEY }}
+      FANOUT_SERVICE_ID: ${{ secrets.FANOUT_SERVICE_ID }}
+      FANOUT_SERVICE_URL: ${{ secrets.FANOUT_SERVICE_URL }}
 
     name: ${{ format('Tests (Ruby {0}, Rails {1})', matrix.ruby-version, matrix.rails-version) }}
     runs-on: ubuntu-latest
@@ -42,7 +45,16 @@ jobs:
         run: |
           bin/rails db:create db:migrate
 
-      - name: Run tests
+      - name: Run tests [mercure]
+        env:
+          TURBO_TRAIN_TEST_SERVER: mercure
         run: |
           bin/test test/**/*_test.rb
+
+      - name: Run tests [fanout]
+        env:
+          TURBO_TRAIN_TEST_SERVER: fanout
+        run: |
+          bin/test test/**/*_test.rb
+    
 
