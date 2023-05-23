@@ -2,7 +2,7 @@ import { Turbo } from "@hotwired/turbo-rails"
 
 export default class TurboTrain extends HTMLElement {
   static get observedAttributes() {
-    return [ 'href', 'session', 'name' ];
+    return [ 'href' ];
   }
 
   constructor() {
@@ -10,7 +10,7 @@ export default class TurboTrain extends HTMLElement {
   }
 
   connectedCallback() {
-    this.eventSource = new EventSource(`${this.href}/mercure?topic=${this.name}&authorization=${this.session}`);
+    this.eventSource = new EventSource(this.href);
     Turbo.connectStreamSource(this.eventSource);
   }
 
@@ -20,14 +20,6 @@ export default class TurboTrain extends HTMLElement {
 
   get href() {
     return this.getAttribute('href');
-  }
-
-  get session() {
-    return this.getAttribute('session');
-  }
-
-  get name() {
-    return this.getAttribute('name');
   }
 }
 
