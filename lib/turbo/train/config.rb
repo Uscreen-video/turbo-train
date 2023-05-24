@@ -52,9 +52,22 @@ module Turbo
 
       def initialize
         @skip_ssl_verification = Rails.env.development? || Rails.env.test?
-        @mercure = MercureConfiguration.new
-        @fanout = FanoutConfiguration.new
+        @mercure = nil
+        @fanout = nil
         @default_server = :mercure
+      end
+
+      def server(server_name)
+        case server_name
+        when :mercure
+          @mercure ||= MercureConfiguration.new
+          yield(@mercure)
+        when :fanout
+          @fanout ||= FanoutConfiguration.new
+          yield(@fanout)
+        else
+          raise ArgumentError, "Unknown server name: #{server_name}"
+        end
       end
     end
 

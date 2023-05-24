@@ -1,5 +1,5 @@
 module Turbo::Train::Broadcasts
-  def broadcast(streamables, content:)
+  def broadcast(streamables, content:, server: nil)
     topics = if streamables.is_a?(Array)
                streamables.map { |s| signed_stream_name(s) }
              else
@@ -11,13 +11,13 @@ module Turbo::Train::Broadcasts
       data: content
     }
 
-    Turbo::Train.server.publish(topics: topics, data: data)
+    Turbo::Train.server(server).publish(topics: topics, data: data)
   end
 
   def broadcast_action_to(*streamables, action:, target: nil, targets: nil, **rendering)
     broadcast(streamables, content: turbo_stream_action_tag(action, target: target, targets: targets, template:
       rendering.delete(:content) || rendering.delete(:html) || (rendering.any? ? render_format(:html, **rendering) : nil)
-    ))
+    ), server: rendering.delete(:server))
   end
 
   def broadcast_render_to(*streamables, **rendering)

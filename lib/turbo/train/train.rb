@@ -30,10 +30,14 @@ module Turbo
       end
 
       def mercure_server
+        raise ArgumentError, "Mercure configuration is missing" unless configuration.mercure
+
         @mercure_server ||= MercureServer.new(configuration)
       end
 
       def fanout_server
+        raise ArgumentError, "Fanout configuration is missing" unless configuration.fanout
+
         @fanout_server ||= FanoutServer.new(configuration)
       end
 

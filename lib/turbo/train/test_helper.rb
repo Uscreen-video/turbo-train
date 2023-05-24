@@ -64,6 +64,16 @@ module Turbo
           raise "Unknown server type"
         end
       end
+
+      def assert_response_from_mercure_server(r)
+        assert_equal r.code, '200'
+        assert_match /urn:uuid:.*/, r.body
+      end
+
+      def assert_response_from_fanout_server(r)
+        assert_equal r.code, '200'
+        assert_match "Published\n", r.body
+      end
     end
   end
 end
