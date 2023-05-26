@@ -1,17 +1,11 @@
 module Turbo
   module Train
-    class Server
-      attr_reader :configuration
-
-      def initialize(configuration)
-        @configuration = configuration
-      end
-
+    class MercureServer < BaseServer
       def publish(topics:, data:)
         payload = { mercure: { publish: topics } }
-        token = JWT.encode payload, configuration.publisher_key, ALGORITHM
+        token = JWT.encode payload, server_config.publisher_key, ALGORITHM
 
-        uri = URI("#{configuration.url}/mercure")
+        uri = URI(publish_url)
 
         req = Net::HTTP::Post.new(uri)
         req['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -29,6 +23,10 @@ module Turbo
         Net::HTTP.start(uri.host, uri.port, opts) do |http|
           http.request(req)
         end
+      end
+
+      def server_config
+        configuration.mercure
       end
     end
   end

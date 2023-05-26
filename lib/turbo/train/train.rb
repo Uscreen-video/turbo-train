@@ -18,8 +18,27 @@ module Turbo
         Turbo.signed_stream_verifier.generate stream_name_from(streamables)
       end
 
-      def server
-        @server ||= Server.new(configuration)
+      def server(server = nil)
+        @server ||= case server || configuration.default_server
+        when :mercure
+          mercure_server
+        when :fanout
+          fanout_server
+        else
+          raise ArgumentError, "Unknown server: #{server}"
+        end
+      end
+
+      def mercure_server
+        raise ArgumentError, "Mercure configuration is missing" unless configuration.mercure
+
+        @mercure_server ||= MercureServer.new(configuration)
+      end
+
+      def fanout_server
+        raise ArgumentError, "Fanout configuration is missing" unless configuration.fanout
+
+        @fanout_server ||= FanoutServer.new(configuration)
       end
 
       def stream_name_from(streamables)
@@ -28,10 +47,6 @@ module Turbo
         else
           streamables.then { |streamable| streamable.try(:to_gid_param) || streamable.to_param }
         end
-      end
-
-      def url
-        configuration.url
       end
 
       private

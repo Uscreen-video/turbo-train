@@ -3,13 +3,31 @@ module Turbo
   module Train
     module TestHelper
       def before_setup
-        Turbo::Train.instance_variable_set(:@server, Turbo::Train::TestServer.new(Turbo::Train.configuration))
+        test_server = case ENV.fetch('TURBO_TRAIN_TEST_SERVER', 'mercure').to_sym
+                      when :mercure
+                        Turbo::Train::TestServer.new(Turbo::Train.mercure_server, Turbo::Train.configuration)
+                      when :fanout
+                        Turbo::Train::TestServer.new(Turbo::Train.fanout_server, Turbo::Train.configuration)
+                      else
+                        raise "Unknown test server: #{ENV['TURBO_TRAIN_TEST_SERVER']}"
+                      end
+
+        Turbo::Train.instance_variable_set(:@server, test_server)
         super
       end
 
       def after_teardown
+        test_server = case ENV.fetch('TURBO_TRAIN_TEST_SERVER', 'mercure').to_sym
+                      when :mercure
+                        Turbo::Train.mercure_server
+                      when :fanout
+                        Turbo::Train.fanout_server
+                      else
+                        raise "Unknown test server: #{ENV['TURBO_TRAIN_TEST_SERVER']}"
+                      end
+
         super
-        Turbo::Train.instance_variable_set(:@server, Turbo::Train::Server.new(Turbo::Train.configuration))
+        Turbo::Train.instance_variable_set(:@server, test_server)
       end
 
       def assert_broadcast_on(stream, data, &block)
@@ -35,6 +53,26 @@ module Turbo
         end
 
         assert message, "No messages sent with #{data} to #{Turbo::Train.stream_name_from(stream)}"
+      end
+
+      def assert_body_match(r)
+        if Turbo::Train.server.real_server.is_a?(Turbo::Train::FanoutServer)
+          assert_match "Published\n", r.body
+        elsif Turbo::Train.server.real_server.is_a?(Turbo::Train::MercureServer)
+          assert_match /urn:uuid:.*/, r.body
+        else
+          raise "Unknown server type"
+        end
+      end
+
+      def assert_response_from_mercure_server(r)
+        assert_equal r.code, '200'
+        assert_match /urn:uuid:.*/, r.body
+      end
+
+      def assert_response_from_fanout_server(r)
+        assert_equal r.code, '200'
+        assert_match "Published\n", r.body
       end
     end
   end
