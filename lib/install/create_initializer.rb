@@ -3,7 +3,7 @@ create_file Rails.root.join("config/initializers/turbo_train.rb") do
   %{
 Turbo::Train.configure do |config|
   config.skip_ssl_verification = true # Development only; don't do this in production
-  config.default_server =  # Default value is :mercure
+  config.default_server = :mercure # Default value is :mercure
 
   config.server :mercure do |mercure|
     mercure.mercure_domain = 'localhost'
