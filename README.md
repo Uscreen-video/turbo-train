@@ -6,7 +6,7 @@
      src="https://user-images.githubusercontent.com/3010927/210603861-4b265489-a4a7-4d2a-bceb-40ceccebcd96.jpg">
 
 
-Real-time page updates for your Rails app over SSE with [Mercure](https://mercure.rocks) and [Hotwire Turbo](https://turbo.hotwired.dev/handbook/streams#integration-with-server-side-frameworks).
+Real-time page updates for your Rails app over SSE with [Mercure](https://mercure.rocks) or [Fanout Cloud](https://fanout.io/cloud) and [Hotwire Turbo](https://turbo.hotwired.dev/handbook/streams#integration-with-server-side-frameworks).
 
 * **Uses [SSE](https://html.spec.whatwg.org/multipage/server-sent-events.html)**. No more websockets, client libraries, JS code and handling reconnects. Just an HTTP connection. Let the [browser](https://caniuse.com/eventsource) do the work.
 * **Seamless Hotwire integration.** Use it exactly like [ActionCable](https://github.com/hotwired/turbo-rails#come-alive-with-turbo-streams). Drop-in replacement for `broadcast_action_to` and usual helpers.
@@ -16,7 +16,7 @@ Real-time page updates for your Rails app over SSE with [Mercure](https://mercur
 
 Using this gem requires some knowledge of ActionCable and broadcasting turbo streams. Turbo::Train is designed to mimic those, so it is highly recommended to first try the original to understand the concept.
 
-You can start [here](https://hotwired.dev/) and proceed with the [Turbo Handbook](https://turbo.hotwired.dev/handbook/introduction). One of its chapters will be covering [Turbo Streams](https://turbo.hotwired.dev/handbook/streams). Specifically [this section](https://turbo.hotwired.dev/handbook/streams#integration-with-server-side-frameworks) would be the main prerequisite to understanding what this gem is about: it covers [Broadcastable](https://github.com/hotwired/turbo-rails/blob/main/app/models/concerns/turbo/broadcastable.rb) and the overall idea of working with Mercure.
+You can start [here](https://hotwired.dev/) and proceed with the [Turbo Handbook](https://turbo.hotwired.dev/handbook/introduction). One of its chapters will be covering [Turbo Streams](https://turbo.hotwired.dev/handbook/streams). Specifically [this section](https://turbo.hotwired.dev/handbook/streams#integration-with-server-side-frameworks) would be the main prerequisite to understanding what this gem is about: it covers [Broadcastable](https://github.com/hotwired/turbo-rails/blob/main/app/models/concerns/turbo/broadcastable.rb) and the overall idea of working with Mercure or Fanout Cloud.
 
 ## Prerequisites
 
@@ -58,10 +58,13 @@ Now you are ready to run 🚀
 ```
 caddy run
 ```
-#### Fanout
+#### Fanout Cloud
 
-[Fanout](https://fanout.io/) is a cloud platform. To use Fanout you must purchase a paid account with a contract for Fastly's services.
+We only support the cloud version today. To use [Fanout](https://fanout.io/cloud/) you must purchase a paid account with a contract for Fastly's services.
 
+#### Fanout self-hosted (Pushpin)
+
+Coming soon.
 ## Usage
 
 If you are familiar with broadcasting from ActionCable, usage would be extremely familiar:
