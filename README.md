@@ -65,6 +65,7 @@ We only support the cloud version today. To use [Fanout](https://fanout.io/cloud
 #### Fanout self-hosted (Pushpin)
 
 Coming soon.
+
 ## Usage
 
 If you are familiar with broadcasting from ActionCable, usage would be extremely familiar:
