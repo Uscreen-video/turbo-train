@@ -24,7 +24,7 @@ group :test do
   gem 'capybara', '>= 3.39.2'
   gem 'rexml'
   gem 'selenium-webdriver', '4.20.0'
-  gem 'sqlite3'
+  gem 'sqlite3', '~> 1.4'
 end
 
 # Start debugger with binding.b [https://github.com/ruby/debug]
