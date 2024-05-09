@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Turbo
   module Train
     class FanoutServer < BaseServer
@@ -6,11 +8,12 @@ module Turbo
         req = Net::HTTP::Post.new(uri)
         req['Fastly-Key'] = server_config.fastly_key
 
-        message = data[:data].gsub("\n", "")
-        payload = {items: []}
+        message = data[:data].gsub("\n", '')
+        payload = { items: [] }
 
         Array(topics).each do |topic|
-          payload[:items] << {channel: topic, formats: { 'http-stream': { content: "event: message\ndata: #{message}\n\n" } } }
+          payload[:items] << { channel: topic,
+                               formats: { 'http-stream': { content: "event: message\ndata: #{message}\n\n" } } }
         end
 
         req.body = payload.to_json
@@ -19,9 +22,7 @@ module Turbo
           use_ssl: uri.scheme == 'https'
         }
 
-        if configuration.skip_ssl_verification
-          opts[:verify_mode] = OpenSSL::SSL::VERIFY_NONE
-        end
+        opts[:verify_mode] = OpenSSL::SSL::VERIFY_NONE if configuration.skip_ssl_verification
 
         Net::HTTP.start(uri.host, uri.port, opts) do |http|
           http.request(req)

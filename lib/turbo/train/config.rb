@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Turbo
   module Train
     class MercureConfiguration
@@ -19,11 +21,11 @@ module Turbo
       end
 
       def listen_url(topic, platform: 'web')
-        "#{url}/mercure?topic=#{Turbo::Train.signed_stream_name(topic)}&authorization=#{jwt_auth_token({ platform: platform })}"
+        "#{url}/mercure?topic=#{Turbo::Train.signed_stream_name(topic)}&authorization=#{jwt_auth_token({ platform: })}"
       end
 
       def jwt_auth_token(payload)
-        structured_payload = { mercure: { payload: payload } }
+        structured_payload = { mercure: { payload: } }
         JWT.encode structured_payload, subscriber_key, ALGORITHM
       end
     end
@@ -47,13 +49,32 @@ module Turbo
       end
     end
 
+    class AnycableConfiguration
+      attr_accessor :anycable_url, :broadcast_key
+
+      def initialize
+        super
+        @anycable_url = 'http://localhost:8080'
+        @broadcast_key = 'test'
+      end
+
+      def publish_url
+        "#{@anycable_url}/_broadcast"
+      end
+
+      def listen_url(topic, **)
+        "#{@anycable_url}/events?stream=#{Turbo::Train.signed_stream_name(topic)}"
+      end
+    end
+
     class Configuration
-      attr_accessor :skip_ssl_verification, :mercure, :fanout, :default_server
+      attr_accessor :skip_ssl_verification, :mercure, :fanout, :anycable, :default_server
 
       def initialize
         @skip_ssl_verification = Rails.env.development? || Rails.env.test?
         @mercure = nil
         @fanout = nil
+        @anycable = nil
         @default_server = :mercure
       end
 
@@ -65,6 +86,9 @@ module Turbo
         when :fanout
           @fanout ||= FanoutConfiguration.new
           yield(@fanout)
+        when :anycable
+          @anycable ||= AnycableConfiguration.new
+          yield(@anycable)
         else
           raise ArgumentError, "Unknown server name: #{server_name}"
         end

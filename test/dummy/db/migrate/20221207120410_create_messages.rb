@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateMessages < ActiveRecord::Migration["#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}"]
   def change
     create_table :messages do |t|

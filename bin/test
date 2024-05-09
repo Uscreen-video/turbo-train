@@ -1,17 +1,19 @@
 #!/usr/bin/env ruby
-$: << File.expand_path("../test", __dir__)
+# frozen_string_literal: true
 
-puts "Installing Ruby dependencies"
+$LOAD_PATH << File.expand_path('../test', __dir__)
+
+puts 'Installing Ruby dependencies'
 `bundle install`
 
-puts "Installing JavaScript dependencies"
+puts 'Installing JavaScript dependencies'
 `yarn install`
 
-puts "Building JavaScript"
+puts 'Building JavaScript'
 `yarn build`
 
-puts "Preparing test database"
+puts 'Preparing test database'
 `cd test/dummy; ./bin/rails db:test:prepare`
 
-require "bundler/setup"
-require "rails/plugin/test"
+require 'bundler/setup'
+require 'rails/plugin/test'

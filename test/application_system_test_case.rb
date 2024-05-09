@@ -1,4 +1,8 @@
-require "test_helper"
+# frozen_string_literal: true
+
+require 'test_helper'
+
+Webdrivers::Chromedriver.required_version = '124.0.6367.155'
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   if ENV['CI']

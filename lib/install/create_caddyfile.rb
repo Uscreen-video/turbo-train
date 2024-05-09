@@ -1,6 +1,8 @@
-say "Creating Caddyfile"
-create_file Rails.root.join("Caddyfile") do
-  %{
+# frozen_string_literal: true
+
+say 'Creating Caddyfile'
+create_file Rails.root.join('Caddyfile') do
+  %(
 localhost
 
 route {
@@ -12,5 +14,5 @@ route {
 
     respond "Not Found" 404
 }
-  }
+  )
 end

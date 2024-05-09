@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Turbo
   module Train
     class TestServer < BaseServer
@@ -15,7 +17,7 @@ module Turbo
           @channels_data[topic] << data[:data]
         end
 
-        real_server.publish(topics: topics, data: data) if real_server
+        real_server&.publish(topics:, data:)
       end
 
       def broadcasts(channel)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Based on: ActionCable::TestHelper
 module Turbo
   module Train
@@ -8,6 +10,8 @@ module Turbo
                         Turbo::Train::TestServer.new(Turbo::Train.mercure_server, Turbo::Train.configuration)
                       when :fanout
                         Turbo::Train::TestServer.new(Turbo::Train.fanout_server, Turbo::Train.configuration)
+                      when :anycable
+                        Turbo::Train::TestServer.new(Turbo::Train.anycable_server, Turbo::Train.configuration)
                       else
                         raise "Unknown test server: #{ENV['TURBO_TRAIN_TEST_SERVER']}"
                       end
@@ -22,6 +26,8 @@ module Turbo
                         Turbo::Train.mercure_server
                       when :fanout
                         Turbo::Train.fanout_server
+                      when :anycable
+                        Turbo::Train.anycable_server
                       else
                         raise "Unknown test server: #{ENV['TURBO_TRAIN_TEST_SERVER']}"
                       end
@@ -56,18 +62,32 @@ module Turbo
       end
 
       def assert_body_match(r)
-        if Turbo::Train.server.real_server.is_a?(Turbo::Train::FanoutServer)
+        case Turbo::Train.server.real_server
+        when Turbo::Train::FanoutServer
           assert_match "Published\n", r.body
-        elsif Turbo::Train.server.real_server.is_a?(Turbo::Train::MercureServer)
-          assert_match /urn:uuid:.*/, r.body
+        when Turbo::Train::MercureServer
+          assert_match(/urn:uuid:.*/, r.body)
+        when Turbo::Train::AnycableServer
+          assert_match '', r.body
         else
-          raise "Unknown server type"
+          raise 'Unknown server type'
+        end
+      end
+
+      def assert_code_ok(r)
+        case Turbo::Train.server.real_server
+        when Turbo::Train::FanoutServer, Turbo::Train::MercureServer
+          assert_equal r.code, '200'
+        when Turbo::Train::AnycableServer
+          assert_equal r.code, '201'
+        else
+          raise 'Unknown server type'
         end
       end
 
       def assert_response_from_mercure_server(r)
         assert_equal r.code, '200'
-        assert_match /urn:uuid:.*/, r.body
+        assert_match(/urn:uuid:.*/, r.body)
       end
 
       def assert_response_from_fanout_server(r)

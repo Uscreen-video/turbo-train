@@ -1,27 +1,29 @@
-source "https://rubygems.org"
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Specify your gem's dependencies in turbo-train-test.gemspec.
 gemspec
 
-rails_version = ENV.fetch("RAILS_VERSION", "6.1")
+rails_version = ENV.fetch('RAILS_VERSION', '6.1')
 
-if rails_version == "main"
-  rails_constraint = { github: "rails/rails" }
-else
-  rails_constraint = "~> #{rails_version}.0"
-end
+rails_constraint = if rails_version == 'main'
+                     { github: 'rails/rails' }
+                   else
+                     "~> #{rails_version}.0"
+                   end
 
 group :development, :test do
-  gem "rails", rails_constraint
-  gem "sprockets-rails"
-  gem 'importmap-rails'
   gem 'dotenv-rails'
+  gem 'importmap-rails'
+  gem 'rails', rails_constraint
+  gem 'sprockets-rails'
 end
 
 group :test do
-  gem 'puma'
   gem 'capybara'
+  gem 'puma'
   gem 'rexml'
   # Locked because on 4.9.1 getting error:
   # BroadcastingTest#test_Turbo::Train_broadcasts_Turbo_Streams:
@@ -29,8 +31,8 @@ group :test do
   #     selenium-webdriver-4.9.1/lib/selenium/webdriver/common/logger.rb:51:in `initialize'
   # https://github.com/SeleniumHQ/selenium/issues/12013
   gem 'selenium-webdriver', '4.9.0'
-  gem 'webdrivers'
   gem 'sqlite3'
+  gem 'webdrivers', '= 5.3.0'
 end
 
 # Start debugger with binding.b [https://github.com/ruby/debug]

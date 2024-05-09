@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Turbo
   module Train
     class ActionBroadcastJob < ActiveJob::Base
@@ -6,8 +8,8 @@ module Turbo
       def perform(stream, action:, target:, **rendering)
         Turbo::Train.broadcast_action_to(
           stream,
-          action: action,
-          target: target,
+          action:,
+          target:,
           **rendering
         )
       end

@@ -2,21 +2,26 @@
 
 module Turbo
   module Train
-    class MercureServer < BaseServer
+    class AnycableServer < BaseServer
       def publish(topics:, data:)
-        payload = { mercure: { publish: topics } }
-        token = JWT.encode payload, server_config.publisher_key, ALGORITHM
-
-        uri = URI(publish_url)
-
+        uri = URI(server_config.publish_url)
         req = Net::HTTP::Post.new(uri)
-        req['Content-Type'] = 'application/x-www-form-urlencoded'
-        req['Authorization'] = "Bearer #{token}"
+        req['Content-Type'] = 'application/json'
+        req['Authorization'] = "Bearer #{server_config.broadcast_key}"
 
-        req.body = URI.encode_www_form(data)
+        message = data[:data].gsub("\n", '')
+
         opts = {
           use_ssl: uri.scheme == 'https'
         }
+
+        payload = []
+
+        Array(topics).each do |topic|
+          payload << { stream: topic, data: message }
+        end
+
+        req.body = payload.to_json
 
         opts[:verify_mode] = OpenSSL::SSL::VERIFY_NONE if configuration.skip_ssl_verification
 
@@ -26,7 +31,7 @@ module Turbo
       end
 
       def server_config
-        configuration.mercure
+        configuration.anycable
       end
     end
   end
