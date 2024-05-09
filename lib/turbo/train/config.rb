@@ -47,13 +47,32 @@ module Turbo
       end
     end
 
+    class AnycableConfiguration
+      attr_accessor :anycable_url, :broadcast_key
+
+      def initialize
+        super
+        @anycable_url = 'http://localhost:8080'
+        @broadcast_key = 'test'
+      end
+
+      def publish_url
+        "#{@anycable_url}/_broadcast"
+      end
+
+      def listen_url(topic, **)
+        "#{@anycable_url}/events?stream=#{Turbo::Train.signed_stream_name(topic)}"
+      end
+    end
+
     class Configuration
-      attr_accessor :skip_ssl_verification, :mercure, :fanout, :default_server
+      attr_accessor :skip_ssl_verification, :mercure, :fanout, :anycable, :default_server
 
       def initialize
         @skip_ssl_verification = Rails.env.development? || Rails.env.test?
         @mercure = nil
         @fanout = nil
+        @anycable = nil
         @default_server = :mercure
       end
 
@@ -65,6 +84,9 @@ module Turbo
         when :fanout
           @fanout ||= FanoutConfiguration.new
           yield(@fanout)
+        when :anycable
+          @anycable ||= AnycableConfiguration.new
+          yield(@anycable)
         else
           raise ArgumentError, "Unknown server name: #{server_name}"
         end

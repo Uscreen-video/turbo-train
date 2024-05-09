@@ -22,6 +22,8 @@ jobs:
       FANOUT_FASTLY_KEY: ${{ secrets.FANOUT_FASTLY_KEY }}
       FANOUT_SERVICE_ID: ${{ secrets.FANOUT_SERVICE_ID }}
       FANOUT_SERVICE_URL: ${{ secrets.FANOUT_SERVICE_URL }}
+      ANYCABLE_URL: ${{ secrets.ANYCABLE_URL }}
+      ANYCABLE_BROADCAST_KEY: ${{ secrets.ANYCABLE_BROADCAST_KEY }}
 
     name: ${{ format('Tests (Ruby {0}, Rails {1})', matrix.ruby-version, matrix.rails-version) }}
     runs-on: ubuntu-latest
@@ -56,5 +58,10 @@ jobs:
           TURBO_TRAIN_TEST_SERVER: fanout
         run: |
           bin/test test/**/*_test.rb
-    
+
+      - name: Run tests [anycable]
+        env:
+          TURBO_TRAIN_TEST_SERVER: anycable
+        run: |
+          bin/test test/**/*_test.rb
 

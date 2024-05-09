@@ -8,6 +8,8 @@ module Turbo
                         Turbo::Train::TestServer.new(Turbo::Train.mercure_server, Turbo::Train.configuration)
                       when :fanout
                         Turbo::Train::TestServer.new(Turbo::Train.fanout_server, Turbo::Train.configuration)
+                      when :anycable
+                        Turbo::Train::TestServer.new(Turbo::Train.anycable_server, Turbo::Train.configuration)
                       else
                         raise "Unknown test server: #{ENV['TURBO_TRAIN_TEST_SERVER']}"
                       end
@@ -22,6 +24,8 @@ module Turbo
                         Turbo::Train.mercure_server
                       when :fanout
                         Turbo::Train.fanout_server
+                      when :anycable
+                        Turbo::Train.anycable_server
                       else
                         raise "Unknown test server: #{ENV['TURBO_TRAIN_TEST_SERVER']}"
                       end
@@ -60,6 +64,20 @@ module Turbo
           assert_match "Published\n", r.body
         elsif Turbo::Train.server.real_server.is_a?(Turbo::Train::MercureServer)
           assert_match /urn:uuid:.*/, r.body
+        elsif Turbo::Train.server.real_server.is_a?(Turbo::Train::AnycableServer)
+          assert_match '', r.body
+        else
+          raise "Unknown server type"
+        end
+      end
+
+      def assert_code_ok(r)
+        if Turbo::Train.server.real_server.is_a?(Turbo::Train::FanoutServer)
+          assert_equal r.code, '200'
+        elsif Turbo::Train.server.real_server.is_a?(Turbo::Train::MercureServer)
+          assert_equal r.code, '200'
+        elsif Turbo::Train.server.real_server.is_a?(Turbo::Train::AnycableServer)
+          assert_equal r.code, '201'
         else
           raise "Unknown server type"
         end
