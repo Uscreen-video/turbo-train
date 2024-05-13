@@ -6,7 +6,7 @@
      src="https://user-images.githubusercontent.com/3010927/210603861-4b265489-a4a7-4d2a-bceb-40ceccebcd96.jpg">
 
 
-Real-time page updates for your Rails app over SSE with [Mercure](https://mercure.rocks) or [Fanout Cloud](https://fanout.io/cloud) and [Hotwire Turbo](https://turbo.hotwired.dev/handbook/streams#integration-with-server-side-frameworks).
+Real-time page updates for your Rails app over SSE with [Mercure](https://mercure.rocks), [Fanout Cloud](https://fanout.io/cloud) or [AnyCable](https://anycable.io/) and [Hotwire Turbo](https://turbo.hotwired.dev/handbook/streams#integration-with-server-side-frameworks).
 
 * **Uses [SSE](https://html.spec.whatwg.org/multipage/server-sent-events.html)**. No more websockets, client libraries, JS code and handling reconnects. Just an HTTP connection. Let the [browser](https://caniuse.com/eventsource) do the work.
 * **Seamless Hotwire integration.** Use it exactly like [ActionCable](https://github.com/hotwired/turbo-rails#come-alive-with-turbo-streams). Drop-in replacement for `broadcast_action_to` and usual helpers.
@@ -63,6 +63,14 @@ caddy run
 We only support the cloud version today. To use [Fanout](https://fanout.io/cloud/) you must purchase a paid account with a contract for Fastly's services.
 
 #### Fanout self-hosted (Pushpin)
+
+Coming soon.
+
+#### AnyCable
+
+```
+anycable-go --host=localhost --port=8080 --sse --broadcast_adapter=http --broadcast_key=test --public_streams --noauth
+```
 
 Coming soon.
 
@@ -123,6 +131,11 @@ Turbo::Train.configure do |config|
     fanout.service_url = ...
     fanout.service_id = ...
     fanout.fastly_key = ...
+  end
+
+  config.server :anycable do |fanout| 
+    ac.anycable_url = 'http://0.0.0.0:8080'
+    ac.broadcast_key = 'test'
   end
 end
 ```

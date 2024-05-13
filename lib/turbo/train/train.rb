@@ -24,6 +24,8 @@ module Turbo
           mercure_server
         when :fanout
           fanout_server
+        when :anycable
+          anycable_server
         else
           raise ArgumentError, "Unknown server: #{server}"
         end
@@ -39,6 +41,12 @@ module Turbo
         raise ArgumentError, "Fanout configuration is missing" unless configuration.fanout
 
         @fanout_server ||= FanoutServer.new(configuration)
+      end
+
+      def anycable_server
+        raise ArgumentError, "Anycable configuration is missing" unless configuration.anycable
+
+        @anycable_server ||= AnycableServer.new(configuration)
       end
 
       def stream_name_from(streamables)

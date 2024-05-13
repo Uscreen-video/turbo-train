@@ -11,7 +11,7 @@ class BroadcastsTest < ActiveSupport::TestCase
     assert_broadcast_on "messages", turbo_stream_action_tag("replace", target: "message_1", template: "Goodbye!") do
       r = Turbo::Train.broadcast_render_to("messages", partial: 'messages/message', locals: { message: message })
 
-      assert_equal r.code, '200'
+      assert_code_ok(r)
       assert_body_match(r)
     end
   end
@@ -19,7 +19,7 @@ class BroadcastsTest < ActiveSupport::TestCase
   test "broadcast_action_to" do
     assert_broadcast_on 'messages', turbo_stream_action_tag("replace", target: "target", template: 'content') do
       r = Turbo::Train.broadcast_action_to('messages', action: 'replace', target: 'target', content: 'content')
-      assert_equal r.code, '200'
+      assert_code_ok(r)
       assert_body_match(r)
     end
   end
@@ -27,7 +27,7 @@ class BroadcastsTest < ActiveSupport::TestCase
   test "broadcast_append_to" do
     assert_broadcast_on 'messages', turbo_stream_action_tag("append", target: "target", template: 'content') do
       r = Turbo::Train.broadcast_append_to('messages', target: 'target', content: 'content')
-      assert_equal r.code, '200'
+      assert_code_ok(r)
       assert_body_match(r)
     end
   end
@@ -35,7 +35,7 @@ class BroadcastsTest < ActiveSupport::TestCase
   test "broadcast_remove_to" do
     assert_broadcast_on 'messages', turbo_stream_action_tag("remove", target: "target") do
       r = Turbo::Train.broadcast_remove_to('messages', target: 'target')
-      assert_equal r.code, '200'
+      assert_code_ok(r)
       assert_body_match(r)
     end
   end
@@ -43,7 +43,7 @@ class BroadcastsTest < ActiveSupport::TestCase
   test "broadcast_replace_to" do
     assert_broadcast_on 'messages', turbo_stream_action_tag("replace", target: "target", template: 'content') do
       r = Turbo::Train.broadcast_replace_to('messages', target: 'target', content: 'content')
-      assert_equal r.code, '200'
+      assert_code_ok(r)
       assert_body_match(r)
     end
   end
@@ -51,7 +51,7 @@ class BroadcastsTest < ActiveSupport::TestCase
   test "broadcast_update_to" do
     assert_broadcast_on 'messages', turbo_stream_action_tag("update", target: "target", template: 'content') do
       r = Turbo::Train.broadcast_update_to('messages', target: 'target', content: 'content')
-      assert_equal r.code, '200'
+      assert_code_ok(r)
       assert_body_match(r)
     end
   end
@@ -59,7 +59,7 @@ class BroadcastsTest < ActiveSupport::TestCase
   test "broadcast_before_to" do
     assert_broadcast_on 'messages', turbo_stream_action_tag("before", target: "target", template: 'content') do
       r = Turbo::Train.broadcast_before_to('messages', target: 'target', content: 'content')
-      assert_equal r.code, '200'
+      assert_code_ok(r)
       assert_body_match(r)
     end
   end
@@ -67,7 +67,7 @@ class BroadcastsTest < ActiveSupport::TestCase
   test "broadcast_after_to" do
     assert_broadcast_on 'messages', turbo_stream_action_tag("after", target: "target", template: 'content') do
       r = Turbo::Train.broadcast_after_to('messages', target: 'target', content: 'content')
-      assert_equal r.code, '200'
+      assert_code_ok(r)
       assert_body_match(r)
     end
   end
@@ -75,7 +75,7 @@ class BroadcastsTest < ActiveSupport::TestCase
   test "broadcast_prepend_to" do
     assert_broadcast_on 'messages', turbo_stream_action_tag("prepend", target: "target", template: 'content') do
       r = Turbo::Train.broadcast_prepend_to('messages', target: 'target', content: 'content')
-      assert_equal r.code, '200'
+      assert_code_ok(r)
       assert_body_match(r)
     end
   end
