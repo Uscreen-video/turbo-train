@@ -3,6 +3,7 @@
 /log/*.log
 /pkg/
 /tmp/
+/node_modules
 /test/dummy/db/*.sqlite3
 /test/dummy/db/*.sqlite3-*
 /test/dummy/log/*.log
