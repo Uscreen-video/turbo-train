@@ -19,6 +19,9 @@ jobs:
       FANOUT_SERVICE_URL: ${{ secrets.FANOUT_SERVICE_URL }}
       ANYCABLE_URL: ${{ secrets.ANYCABLE_URL }}
       ANYCABLE_BROADCAST_KEY: ${{ secrets.ANYCABLE_BROADCAST_KEY }}
+      MERCURE_DOMAIN: ${{ secrets.MERCURE_DOMAIN }}
+      MERCURE_PUBLISHER_KEY: ${{ secrets.MERCURE_PUBLISHER_KEY }}
+      MERCURE_SUBSCRIBER_KEY: ${{ secrets.MERCURE_SUBSCRIBER_KEY }}
 
     name: ${{ format('Tests (Ruby {0}, Rails {1})', matrix.ruby-version, matrix.rails-version) }}
     runs-on: ubuntu-latest
@@ -51,6 +54,12 @@ jobs:
       - name: Run tests [anycable]
         env:
           TURBO_TRAIN_TEST_SERVER: anycable
+        run: |
+          bin/test test/**/*_test.rb
+
+      - name: Run tests [mercure]
+        env:
+          TURBO_TRAIN_TEST_SERVER: mercure
         run: |
           bin/test test/**/*_test.rb
 
