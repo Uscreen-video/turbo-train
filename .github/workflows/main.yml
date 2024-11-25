@@ -10,7 +10,6 @@ jobs:
         rails-version:
           - "6.1"
           - "7.0"
-          - "main"
 
     env:
       RAILS_VERSION: "${{ matrix.rails-version }}"
