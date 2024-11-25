@@ -5,24 +5,23 @@ jobs:
     strategy:
       matrix:
         ruby-version:
-          - "3.1"
-          - "3.2.2"
+          - "3.2"
+          - "3.3.3"
         rails-version:
           - "6.1"
           - "7.0"
-          - "main"
 
     env:
       RAILS_VERSION: "${{ matrix.rails-version }}"
       TEST_MSG_ID: "msg-${{ matrix.rails-version }}-${{ matrix.ruby-version }}"
-      MERCURE_DOMAIN: ${{ secrets.MERCURE_DOMAIN }}
-      MERCURE_PUBLISHER_KEY: ${{ secrets.MERCURE_PUBLISHER_KEY }}
-      MERCURE_SUBSCRIBER_KEY: ${{ secrets.MERCURE_SUBSCRIBER_KEY }}
       FANOUT_FASTLY_KEY: ${{ secrets.FANOUT_FASTLY_KEY }}
       FANOUT_SERVICE_ID: ${{ secrets.FANOUT_SERVICE_ID }}
       FANOUT_SERVICE_URL: ${{ secrets.FANOUT_SERVICE_URL }}
       ANYCABLE_URL: ${{ secrets.ANYCABLE_URL }}
       ANYCABLE_BROADCAST_KEY: ${{ secrets.ANYCABLE_BROADCAST_KEY }}
+      MERCURE_DOMAIN: ${{ secrets.MERCURE_DOMAIN }}
+      MERCURE_PUBLISHER_KEY: ${{ secrets.MERCURE_PUBLISHER_KEY }}
+      MERCURE_SUBSCRIBER_KEY: ${{ secrets.MERCURE_SUBSCRIBER_KEY }}
 
     name: ${{ format('Tests (Ruby {0}, Rails {1})', matrix.ruby-version, matrix.rails-version) }}
     runs-on: ubuntu-latest
@@ -46,12 +45,6 @@ jobs:
         run: |
           bin/rails db:create db:migrate
 
-      - name: Run tests [mercure]
-        env:
-          TURBO_TRAIN_TEST_SERVER: mercure
-        run: |
-          bin/test test/**/*_test.rb
-
       - name: Run tests [fanout]
         env:
           TURBO_TRAIN_TEST_SERVER: fanout
@@ -61,6 +54,12 @@ jobs:
       - name: Run tests [anycable]
         env:
           TURBO_TRAIN_TEST_SERVER: anycable
+        run: |
+          bin/test test/**/*_test.rb
+
+      - name: Run tests [mercure]
+        env:
+          TURBO_TRAIN_TEST_SERVER: mercure
         run: |
           bin/test test/**/*_test.rb
 
