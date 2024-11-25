@@ -12,3 +12,4 @@
 Gemfile.lock
 .DS_Store
 .idea
+.mise.toml

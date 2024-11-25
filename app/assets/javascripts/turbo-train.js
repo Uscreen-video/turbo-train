@@ -71,8 +71,12 @@ export default class TurboTrain extends HTMLElement {
 
   #onMessage = (event) => {
     this.error = null
-    const data = JSON.parse(event.data)
-    this.#emit('message', { detail: data })
+    try {
+      const data = JSON.parse(event.data)
+      this.#emit('message', { detail: data, contentType: 'application/json' })
+    } catch (error) {
+      this.#emit('message', { detail: event.data, contentType: 'text/plain' })
+    }
   }
 
   #onError = (error) => {
