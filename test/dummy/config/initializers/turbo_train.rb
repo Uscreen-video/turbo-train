@@ -1,13 +1,5 @@
 Turbo::Train.configure do |config|
-  config.default_server = ENV.fetch('TURBO_TRAIN_TEST_SERVER', 'mercure').to_sym
-
-  if ENV.fetch('TURBO_TRAIN_TEST_SERVER', 'mercure').to_sym == :mercure
-    config.server :mercure do |mercure|
-      mercure.mercure_domain = ENV['MERCURE_DOMAIN'] || raise('MERCURE_DOMAIN is not set')
-      mercure.publisher_key = ENV['MERCURE_PUBLISHER_KEY'] || raise('MERCURE_PUBLISHER_KEY is not set')
-      mercure.subscriber_key = ENV['MERCURE_SUBSCRIBER_KEY'] || raise('MERCURE_SUBSCRIBER_KEY is not set')
-    end
-  end
+  config.default_server = ENV.fetch('TURBO_TRAIN_TEST_SERVER', 'anycable').to_sym
 
   if ENV.fetch('TURBO_TRAIN_TEST_SERVER', 'mercure').to_sym == :fanout
     config.server :fanout do |fanout|
